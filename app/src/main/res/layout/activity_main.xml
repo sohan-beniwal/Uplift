@@ -1,0 +1,71 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:backgroundTint="#FFFFFF"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context=".MainActivity">
+
+    <include
+        android:id="@+id/app_bar"
+        layout="@layout/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+   <ImageView
+       android:id="@+id/heading"
+       android:layout_width="250dp"
+       android:layout_height="230dp"
+       android:layout_marginTop="20dp"
+       android:src="@drawable/heading"
+       android:layout_centerHorizontal="true"
+       android:layout_below="@+id/app_bar"
+       />
+
+    <com.example.uplift.uielements.CustomTextView
+        android:id="@+id/outlinedText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Join us to Donate"
+        android:padding="10dp"
+        android:textSize="40dp"
+        android:layout_below="@+id/heading"
+        android:textColor="@android:color/transparent"
+        android:layout_centerHorizontal="true"
+         />
+    <ImageSwitcher
+        android:id="@+id/imageSwitcher"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="50dp"
+        android:layout_below="@id/outlinedText"
+        android:layout_centerHorizontal="true"
+        android:inAnimation="@android:anim/slide_in_left"
+        android:outAnimation="@android:anim/slide_out_right" />
+
+    <TextSwitcher
+        android:id="@+id/switch_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:layout_below="@id/imageSwitcher"
+        android:inAnimation="@android:anim/slide_in_left"
+        android:outAnimation="@android:anim/slide_out_right" />
+    <Button
+        android:id="@+id/btn_donate"
+        android:layout_width="180dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="20dp"
+        android:backgroundTint="@color/app_bar_color"
+        android:text="Donate"
+        android:textColor="@android:color/white"
+        android:textSize="30sp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/switch_text" />
+
+
+</RelativeLayout>
