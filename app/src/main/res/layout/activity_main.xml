@@ -1,29 +1,30 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:background="#ffffff"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     tools:context=".MainActivity">
 
     <include
         android:id="@+id/app_bar"
         layout="@layout/app_bar"
-        android:layout_width="match_parent"
-        android:layout_height="70dp" />
+        android:layout_width="0dp"
+        android:layout_height="70dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-
-   <ImageView
-       android:id="@+id/heading"
-       android:layout_width="match_parent"
-       android:layout_height="240dp"
-       android:layout_marginTop="20dp"
-       android:src="@drawable/heading_2"
-       android:layout_centerHorizontal="true"
-       android:layout_below="@+id/app_bar"
-       />
+    <ImageView
+        android:id="@+id/heading"
+        android:layout_width="0dp"
+        android:layout_height="240dp"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/heading_2"
+        app:layout_constraintTop_toBottomOf="@id/app_bar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <com.example.uplift.uielements.CustomTextView
         android:id="@+id/outlinedText"
@@ -32,29 +33,33 @@
         android:text="Join us to Donate"
         android:padding="10dp"
         android:textSize="35dp"
-        android:layout_below="@+id/heading"
         android:textColor="@android:color/transparent"
-        android:layout_centerHorizontal="true"
-         />
+        app:layout_constraintTop_toBottomOf="@id/heading"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <ImageSwitcher
         android:id="@+id/imageSwitcher"
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:layout_marginTop="50dp"
-        android:layout_below="@id/outlinedText"
-        android:layout_centerHorizontal="true"
         android:inAnimation="@android:anim/slide_in_left"
-        android:outAnimation="@android:anim/slide_out_right" />
+        android:outAnimation="@android:anim/slide_out_right"
+        app:layout_constraintTop_toBottomOf="@id/outlinedText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <TextSwitcher
         android:id="@+id/switch_text"
         android:layout_width="wrap_content"
         android:layout_height="70dp"
-        android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
-        android:layout_below="@id/imageSwitcher"
         android:inAnimation="@android:anim/slide_in_left"
-        android:outAnimation="@android:anim/slide_out_right" />
+        android:outAnimation="@android:anim/slide_out_right"
+        app:layout_constraintTop_toBottomOf="@id/imageSwitcher"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <Button
         android:id="@+id/btn_donate"
         android:layout_width="180dp"
@@ -64,8 +69,8 @@
         android:text="Donate"
         android:textColor="@android:color/white"
         android:textSize="30sp"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/switch_text" />
+        app:layout_constraintTop_toBottomOf="@id/switch_text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
