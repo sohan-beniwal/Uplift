@@ -50,7 +50,7 @@ class MainActivity : AppCompatActivity() {
         textSwitcher = findViewById(R.id.switch_text)
         textSwitcher.setFactory {
             TextView(this).apply {
-                textSize = 30f
+                textSize = 40f
                 setTypeface(null, android.graphics.Typeface.BOLD)
                 setTextColor(ContextCompat.getColor(this@MainActivity, R.color.app_bar_color))
             }
