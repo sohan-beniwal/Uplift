@@ -1,4 +1,4 @@
-package com.example.uplift
+package com.example.uplift.activities
 
 import android.graphics.BitmapFactory
 import android.os.Bundle
@@ -8,8 +8,8 @@ import android.widget.FrameLayout
 import android.widget.ImageSwitcher
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.graphics.drawable.RoundedBitmapDrawable
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
+import com.example.uplift.R
 
 class MainActivity : AppCompatActivity() {
 
