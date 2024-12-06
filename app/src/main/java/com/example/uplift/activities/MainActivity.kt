@@ -1,20 +1,28 @@
 package com.example.uplift.activities
 
+import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.ImageSwitcher
 import android.widget.ImageView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
 import com.example.uplift.R
+import com.example.uplift.activities.BaseActivity
+import com.example.uplift.activities.DonateActivity
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
 
     private lateinit var imageSwitcher: ImageSwitcher
     private var currentIndex = 0
+    private lateinit var donateBtn: Button
+    private lateinit var foodBtn: ImageView
+    private lateinit var moneyBtn: ImageView
+    private lateinit var otherBtn: ImageView
+    private lateinit var clothBtn: ImageView
 
     // Arrays for images
     private val imagesArray = arrayOf(
@@ -25,6 +33,7 @@ class MainActivity : AppCompatActivity() {
 
     // Handler for scheduling switching
     private val handler = Handler(Looper.getMainLooper())
+
     private val switchRunnable = object : Runnable {
         override fun run() {
             // Increment the index and reset if it exceeds the bounds
@@ -42,7 +51,14 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Initialize ImageSwitcher
+        // Initialize buttons and views
+        //donateBtn = findViewById(R.id.btn_donate)
+        clothBtn = findViewById(R.id.image2)
+        foodBtn = findViewById(R.id.image1)
+        otherBtn = findViewById(R.id.image4)
+        moneyBtn = findViewById(R.id.image3)
+
+
         imageSwitcher = findViewById(R.id.imageSwitcher)
         imageSwitcher.setFactory {
             ImageView(this).apply {
@@ -57,8 +73,14 @@ class MainActivity : AppCompatActivity() {
         // Set the initial image with rounded corners
         setImageWithRoundedCorners(imagesArray[currentIndex])
 
-        // Start switching automatically
+        // Start switching images automatically
         handler.postDelayed(switchRunnable, 3000)
+
+        // Set onClickListeners for donation buttons
+        clothBtn.setOnClickListener { navigateToDonateScreen("Clothes") }
+        foodBtn.setOnClickListener { navigateToDonateScreen("Food") }
+        moneyBtn.setOnClickListener { navigateToDonateScreen("Money") }
+        otherBtn.setOnClickListener { navigateToDonateScreen("Other") }
     }
 
     private fun setImageWithRoundedCorners(imageResId: Int) {
@@ -67,8 +89,8 @@ class MainActivity : AppCompatActivity() {
 
         // Create a RoundedBitmapDrawable
         val roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(resources, bitmap)
-        roundedBitmapDrawable.isCircular = false  // Set to false to get rounded corners, not a circle
-        roundedBitmapDrawable.cornerRadius = 300f  // Set corner radius
+        roundedBitmapDrawable.isCircular = false // Set to false to get rounded corners, not a circle
+        roundedBitmapDrawable.cornerRadius = 300f // Set corner radius
 
         // Set the image with rounded corners to ImageSwitcher
         imageSwitcher.setImageDrawable(roundedBitmapDrawable)
@@ -78,5 +100,11 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
         // Remove callbacks to prevent memory leaks
         handler.removeCallbacks(switchRunnable)
+    }
+
+    private fun navigateToDonateScreen(category: String) {
+        val intent = Intent(this, DonateActivity::class.java)
+        intent.putExtra("SELECTED_CATEGORY", category)
+        startActivity(intent)
     }
 }

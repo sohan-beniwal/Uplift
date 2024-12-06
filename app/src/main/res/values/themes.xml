@@ -4,6 +4,9 @@
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
+    <style name="AppTheme" parent="Theme.AppCompat.DayNight">
+        <item name="android:fitsSystemWindows">true</item>
+    </style>
 
     <style name="Theme.Uplift" parent="Base.Theme.Uplift" />
 </resources>

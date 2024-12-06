@@ -1,0 +1,50 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="vertical"
+    android:layout_marginTop="20dp"
+    android:layout_marginStart="5dp"
+    android:padding="16dp"
+    android:background="@color/app_bar_text">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+
+        <ImageView
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:src="@drawable/nav_logo"
+        android:padding="8dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="U P L I F T"
+            android:textStyle="bold"
+            android:layout_gravity="center_vertical"
+            android:textColor="@color/app_bar_color"
+            android:textSize="30sp"
+            android:paddingTop="8dp" />
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hello, XYZ"
+        android:textStyle="bold"
+        android:textColor="@color/app_bar_color"
+        android:textSize="20sp"
+        android:paddingTop="8dp" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Welcome to Uplift"
+        android:textStyle="bold"
+        android:textColor="@color/app_bar_color"
+        android:textSize="10sp" />
+</LinearLayout>

@@ -1,3 +1,23 @@
 <resources>
     <string name="app_name">Uplift</string>
+    <string-array name="dropdown_items">
+        <item>Food</item>
+        <item>Clothes</item>
+        <item>Other</item>
+    </string-array>
+    <string-array name="dropdown_time">
+        <item>9:00 AM</item>
+        <item>11:00 AM</item>
+        <item>1:00 PM</item>
+        <item>3:00 PM</item>
+        <item>5:00 PM</item>
+        <item>7:00 PM</item>
+        <item>9:00 PM</item>
+    </string-array>
+    <string-array name="dropdown_day">
+        <item>Today</item>
+        <item>Tommorrow</item>
+    </string-array>
+    <string name="openDrawer">Open Drawer</string>
+    <string name="closeDrawer">Close Drawer</string>
 </resources>

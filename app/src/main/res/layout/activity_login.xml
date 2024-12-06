@@ -6,7 +6,7 @@
     android:background="#ffffff"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.MainActivity"
+    tools:context=".activities.login_activity"
     >
 
 
@@ -135,7 +135,7 @@
             android:layout_width="250dp"
             android:layout_height="65dp"
             android:layout_marginTop="25dp"
-            android:backgroundTint="@color/app_bar_text"
+            android:background="@drawable/round_button_white"
             android:text="Login"
             android:textColor="@color/app_bar_color"
             android:textSize="25sp"
