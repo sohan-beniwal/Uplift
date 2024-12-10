@@ -1,0 +1,20 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-uplift-dev-1294f-authRole",
+      "UnauthRoleArn": "arn:aws:iam::311141520376:role/amplify-uplift-dev-1294f-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::311141520376:role/amplify-uplift-dev-1294f-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-uplift-dev-1294f-deployment",
+      "UnauthRoleName": "amplify-uplift-dev-1294f-unauthRole",
+      "StackName": "amplify-uplift-dev-1294f",
+      "StackId": "arn:aws:cloudformation:us-east-1:311141520376:stack/amplify-uplift-dev-1294f/459cc5e0-b6b6-11ef-9e5c-12b4c9d12bb5",
+      "AmplifyAppId": "d3e4eafcme5zqn"
+    },
+    "categories": {
+      "auth": {
+        "upliftc2c97606": {}
+      }
+    }
+  }
+}
