@@ -25,7 +25,7 @@
             />
 
         <ImageView
-            android:id="@+id/imageView2"
+            android:id="@+id/gmail_img"
             android:layout_width="140dp"
             android:layout_height="140dp"
             android:layout_marginTop="100dp"
@@ -35,30 +35,30 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/gmail_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="info@uplift.com"
+            android:text="soniishika201@gmail.com"
             android:textColor="@color/app_bar_color"
             android:textSize="18dp"
             android:textStyle="bold"
             android:layout_marginTop="5dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+            app:layout_constraintTop_toBottomOf="@+id/gmail_img" />
 
         <ImageView
-            android:id="@+id/imageView3"
+            android:id="@+id/location_img"
             android:layout_width="140dp"
             android:layout_height="140dp"
             android:layout_marginTop="20dp"
             android:src="@drawable/location_img"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView" />
+            app:layout_constraintTop_toBottomOf="@+id/gmail_text" />
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/location_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="         350, Ellis Street\nMountain Veiw, CA, 94043"
@@ -68,30 +68,30 @@
             android:layout_marginTop="5dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+            app:layout_constraintTop_toBottomOf="@+id/location_img" />
 
         <ImageView
-            android:id="@+id/imageView4"
+            android:id="@+id/phone_img"
             android:layout_width="140dp"
             android:layout_height="140dp"
             android:src="@drawable/phone_img"
             android:layout_marginTop="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView2" />
+            app:layout_constraintTop_toBottomOf="@+id/location_text" />
 
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/phone_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="   XXXXXXXXXX"
+            android:text="   6376396023"
             android:layout_marginTop="5dp"
             android:textColor="@color/app_bar_color"
             android:textSize="18dp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView4" />
+            app:layout_constraintTop_toBottomOf="@+id/phone_img" />
 
         <TextView
             android:layout_width="wrap_content"
