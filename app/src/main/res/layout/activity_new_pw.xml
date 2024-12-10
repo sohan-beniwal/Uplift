@@ -15,7 +15,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="40dp"
         android:text="NEW \nPASSWORD !"
         android:textColor="@color/app_bar_color"
         android:textSize="55sp"
@@ -48,59 +48,61 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <TextView
+            android:id="@+id/password"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="55sp"
-            android:layout_marginBottom="4sp"
+            android:layout_marginLeft="35dp"
+            android:layout_marginTop="20dp"
             android:text="NEW PASSWORD"
             android:textColor="@color/app_bar_text"
             android:textSize="16sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/editText_new_pw_1"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
         </TextView>
 
         <EditText
-            android:id="@+id/editText_new_pw_1"
+            android:id="@+id/new_pw_newPassword"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_marginLeft="40dp"
-            android:layout_marginTop="60dp"
-            android:layout_marginRight="40dp"
+            android:layout_marginLeft="35dp"
+            android:layout_marginRight="35dp"
+            android:layout_marginTop="10dp"
             android:background="@drawable/rounded_edit_text"
             android:backgroundTint="@color/app_bar_text"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:layout_editor_absoluteX="30dp">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/password">
 
         </EditText>
 
         <TextView
+            android:id="@+id/confirmPassword"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="55sp"
-            android:layout_marginBottom="4sp"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="35dp"
             android:text="CONFIRM PASSWORD"
             android:textColor="@color/app_bar_text"
             android:textSize="16sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/editText_new_pw_2"
+            app:layout_constraintTop_toBottomOf= "@+id/new_pw_newPassword"
             app:layout_constraintStart_toStartOf="parent">
 
         </TextView>
 
         <EditText
-            android:id="@+id/editText_new_pw_2"
+            android:id="@+id/new_pw_confirmPassword"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_marginLeft="40dp"
-            android:layout_marginTop="40dp"
-            android:layout_marginRight="40dp"
+            android:layout_marginLeft="35dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="35dp"
             android:background="@drawable/rounded_edit_text"
             android:backgroundTint="@color/app_bar_text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editText_new_pw_1">
+            app:layout_constraintTop_toBottomOf="@+id/confirmPassword">
 
         </EditText>
 
@@ -116,7 +118,7 @@
             android:layout_marginTop="30dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editText_new_pw_2">
+            app:layout_constraintTop_toBottomOf="@+id/new_pw_confirmPassword">
 
         </Button>
 
