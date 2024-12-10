@@ -11,6 +11,9 @@ import android.widget.Toast
 import androidx.core.text.isDigitsOnly
 import com.example.uplift.dataclass.Donation
 import com.example.uplift.R
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
+import com.example.uplift.dataclass.User
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -24,15 +27,15 @@ class DonateActivity : BaseActivity() {
         val spinner: Spinner = findViewById(R.id.mySpinner)
         val time: Spinner = findViewById(R.id.timespinner)
         val day: Spinner = findViewById(R.id.datespinner)
-        val submitbtn : Button = findViewById(R.id.btn_submit)
-        val itemname : EditText = findViewById(R.id.itemname)
-        val quantity : EditText = findViewById(R.id.quantity)
-        val additional : EditText = findViewById(R.id.additionalinformation)
-
+        val submitbtn: Button = findViewById(R.id.btn_submit)
+        val itemname: EditText = findViewById(R.id.itemname)
+        val quantity: EditText = findViewById(R.id.quantity)
+        val additional: EditText = findViewById(R.id.additionalinformation)
 
         val items = resources.getStringArray(R.array.dropdown_items).toMutableList()
         val dayArr = listOf("Select Day", "Today", "Tomorrow")
-        val timeArr = listOf("09:00", "11:00", "13:00", "15:00", "17:00", "19:00", "21:00").toMutableList()
+        val timeArr =
+            listOf("09:00", "11:00", "13:00", "15:00", "17:00", "19:00", "21:00").toMutableList()
 
         items.add(0, "Select Category") // Add hint dynamically
 
@@ -69,9 +72,7 @@ class DonateActivity : BaseActivity() {
         // Function to filter valid times for "Today"
         fun getValidTimes(): List<String> {
             val currentTime = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date())
-            return timeArr.filter { time ->
-                time >= currentTime
-            }
+            return timeArr.filter { time -> time >= currentTime }
         }
 
         // Adapter for the time spinner
@@ -89,7 +90,12 @@ class DonateActivity : BaseActivity() {
 
         // Listener for the day spinner
         day.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
                 val selectedDay = dayArr[position]
                 val updatedTimes = when (selectedDay) {
                     "Today" -> listOf("Select Time") + getValidTimes() // Filter based on current time
@@ -114,7 +120,6 @@ class DonateActivity : BaseActivity() {
             val quantityfinal = quantity.text.toString()
             val additionalfinal = additional.text.toString()
 
-
             if (selectedCategory == "Select Category" ||
                 selectedDay == "Select Day" ||
                 selectedTime == "Select Time" ||
@@ -127,25 +132,65 @@ class DonateActivity : BaseActivity() {
                 return@setOnClickListener
             }
 
-            // Create an object of the data class
-            val donation = Donation(
-                category = selectedCategory,
-                item = itemnamefinal,
-                quantity = quantityfinal,
-                info = additionalfinal,
-                day = selectedDay,
-                time = selectedTime
-            )
+            // Get current user data
+            val currentUser = FirebaseAuth.getInstance().currentUser
+            val userId = currentUser?.uid
+            val userName = currentUser?.displayName
+            val userPhoneNumber = currentUser?.phoneNumber
+            val database = FirebaseDatabase.getInstance().reference
+            val userRef = database.child("users").child(userId!!).child("userdata")
 
-            // Pass the object to the database layer
-            saveDonationToDatabase(donation)
+            // Fetch the user's address
+            userRef.get()
+                .addOnSuccessListener { snapshot ->
+                    val user = snapshot.getValue(User::class.java)
+                    val address = user?.address
+                    if (address != null) {
+                        // Create an object of the data class with user info
+                        val donation = Donation(
+                            category = selectedCategory,
+                            item = itemnamefinal,
+                            quantity = quantityfinal,
+                            info = additionalfinal,
+                            day = selectedDay,
+                            time = selectedTime,
+                            userId = userId,
+                            userName = userName,
+                            userPhoneNumber = userPhoneNumber,
+                            userAddress = address // Use the retrieved address
+                        )
+
+                        // Pass the object to the database layer
+                        saveDonationToDatabase(donation)
+                        itemname.text.clear()
+                        quantity.text.clear()
+                        additional.text.clear()
+                        day.setSelection(0)
+                        time.setSelection(0)
+                    } else {
+                        Toast.makeText(this, "User address not found", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                .addOnFailureListener {
+                    Toast.makeText(this, "Failed to fetch user data", Toast.LENGTH_SHORT).show()
+                }
         }
     }
-    private fun saveDonationToDatabase(donation: Donation) {
-        // Replace with your database logic
-        // For example: Firebase Realtime Database or Room
-        Toast.makeText(this, "Donation Saved: $donation", Toast.LENGTH_SHORT).show()
+
+        private fun saveDonationToDatabase(donation: Donation) {
+        val database = FirebaseDatabase.getInstance()
+        val donationsRef = database.reference.child("donations").push()
+
+        // Store donation data in Firebase Realtime Database
+        donationsRef.setValue(donation)
+            .addOnSuccessListener {
+                Toast.makeText(this, "Donation Saved", Toast.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener {
+                Toast.makeText(this, "Failed to save donation", Toast.LENGTH_SHORT).show()
+            }
     }
+
     private fun preSelectCategory(spinner: Spinner, items: List<String>, category: String) {
         val position = items.indexOf(category)
         if (position != -1) {

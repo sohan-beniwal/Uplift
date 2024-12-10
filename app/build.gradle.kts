@@ -42,6 +42,13 @@ dependencies {
     implementation("com.google.firebase:firebase-database:20.1.0")
     implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
     implementation(libs.androidx.core.ktx)
+    // Kotlin Coroutines
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+
+    // OkHttp for API calls
+    implementation( "com.squareup.okhttp3:okhttp:4.11.0")
+    implementation ("com.google.code.gson:gson:2.10.1")
+    implementation ("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.activity)

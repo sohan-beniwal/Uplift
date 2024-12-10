@@ -27,7 +27,6 @@ class CreateAccountActivity : AppCompatActivity() {
         val nextButton = findViewById<Button>(R.id.btn_create_acc_next)
 
         val text_view_login_1 = findViewById<TextView>(R.id.text_create_acc_already_acc)
-        val text_view_login_2 = findViewById<TextView>(R.id.text_create_acc_login)
 
         fun validateInput(name: String, email: String, password: String, mobileNo: String): Boolean
         {
@@ -74,11 +73,5 @@ class CreateAccountActivity : AppCompatActivity() {
             val intent = Intent(this, login_activity::class.java)
             startActivity(intent)
         }
-        text_view_login_2.setOnClickListener{
-            val intent = Intent(this, login_activity::class.java)
-            startActivity(intent)
-        }
-
-
     }
 }

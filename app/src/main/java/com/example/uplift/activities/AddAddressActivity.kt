@@ -1,21 +1,29 @@
 package com.example.uplift.activities
 
+import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import org.json.JSONObject
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.example.uplift.R
 import com.example.uplift.dataclass.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import kotlinx.coroutines.launch
 
 class AddAddressActivity : AppCompatActivity() {
 
-    private val TAG = "AddAddressActivity"  // Tag for logging
+    private val TAG = "AddAddressActivity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,28 +38,56 @@ class AddAddressActivity : AppCompatActivity() {
         val cityEditText = findViewById<EditText>(R.id.add_address_city)
         val stateEditText = findViewById<EditText>(R.id.add_address_state)
         val pincodeEditText = findViewById<EditText>(R.id.add_address_pincode)
+        val alreadyacc = findViewById<TextView>(R.id.text_add_address_already_acc)
 
-        val signUp_button = findViewById<Button>(R.id.btn_add_address_signup)
-        val text_view_login_1 = findViewById<TextView>(R.id.text_add_address_already_acc)
-        val text_view_login_2 = findViewById<TextView>(R.id.text_add_address_login)
+        val signUpButton = findViewById<Button>(R.id.btn_add_address_signup)
 
-        fun validateInput(houseNo: String, buildingArea: String, otherinfo: String, city: String, state: String, pincode: String): Boolean {
-            Log.d(TAG, "Validating input: houseNo=$houseNo, buildingArea=$buildingArea, otherinfo=$otherinfo, city=$city, state=$state, pincode=$pincode")
+        val progressDialog = ProgressDialog(this)
+        progressDialog.setMessage("Validating address...")
 
+        suspend fun validateInput(
+            houseNo: String,
+            buildingArea: String,
+            otherinfo: String,
+            city: String,
+            state: String,
+            pincode: String
+        ): Boolean {
             if (houseNo.isEmpty() || buildingArea.isEmpty() || city.isEmpty() || state.isEmpty() || pincode.isEmpty()) {
-                Toast.makeText(this, "All required fields are mandatory to be filled!", Toast.LENGTH_SHORT).show()
+                Log.e(TAG, "All required fields must be filled!")
                 return false
             }
 
             if (pincode.length != 6) {
-                Toast.makeText(this, "Enter a valid Pincode!", Toast.LENGTH_SHORT).show()
+                Log.e(TAG, "Invalid Pincode length!")
                 return false
             }
 
-            return true
+            val address = "$houseNo, $buildingArea, $otherinfo, $city, $state, $pincode"
+            val apiKey = "AIzaSyCp9qkv1uNtVJXFYPvQHb2-ATWYUpyPLJQ"
+            val url = "https://maps.googleapis.com/maps/api/geocode/json?address=$address&key=$apiKey"
+
+            return withContext(Dispatchers.IO) {
+                try {
+                    val client = OkHttpClient()
+                    val request = Request.Builder().url(url).build()
+                    val response = client.newCall(request).execute()
+
+                    response.body?.let { responseBody ->
+                        val json = responseBody.string()
+                        val jsonObject = JSONObject(json)
+                        val status = jsonObject.getString("status")
+
+                        return@withContext (status == "OK")
+                    } ?: false
+                } catch (e: Exception) {
+                    Log.e(TAG, "Error during address validation: $e")
+                    return@withContext false
+                }
+            }
         }
 
-        signUp_button.setOnClickListener {
+        signUpButton.setOnClickListener {
             val houseNo = houseNoEditText.text.toString().trim()
             val buildingArea = buildingAreaEditText.text.toString().trim()
             val otherInfo = otherInfoEditText.text.toString().trim()
@@ -59,67 +95,55 @@ class AddAddressActivity : AppCompatActivity() {
             val state = stateEditText.text.toString().trim()
             val pincode = pincodeEditText.text.toString().trim()
 
-            Log.d(TAG, "Button clicked. Values: houseNo=$houseNo, buildingArea=$buildingArea, otherInfo=$otherInfo, city=$city, state=$state, pincode=$pincode")
+            lifecycleScope.launch {
+                progressDialog.show()
 
-            if (validateInput(houseNo, buildingArea, otherInfo, city, state, pincode)) {
-                val name = intent.getStringExtra("NAME")
-                val email = intent.getStringExtra("EMAIL")
-                val password = intent.getStringExtra("PASSWORD")
-                val mobileNo = intent.getStringExtra("MOBILE_NO")
-                val address = "$houseNo $buildingArea $otherInfo $city $state $pincode"
-                val user = User(
-                    name,mobileNo,city,address
-                )
-                Log.d(TAG, "Creating user with email: $email")
+                val isValid = validateInput(houseNo, buildingArea, otherInfo, city, state, pincode)
+                progressDialog.dismiss()
 
-                auth.createUserWithEmailAndPassword(email!!, password!!)
-                    .addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            val currentUser = auth.currentUser
-                            currentUser?.let {
-                                // User creation successful
-                                val userId = it.uid
-                                Log.d(TAG, "User created successfully. User ID: $userId")
+                if (isValid) {
+                    val name = intent.getStringExtra("NAME") ?: "Unknown"
+                    val email = intent.getStringExtra("EMAIL") ?: ""
+                    val password = intent.getStringExtra("PASSWORD") ?: ""
+                    val mobileNo = intent.getStringExtra("MOBILE_NO") ?: ""
+                    val address = "$houseNo $buildingArea $otherInfo $city $state $pincode"
+                    val user = User(name, mobileNo, city, address)
 
-                                // Store the user data (address) in Firebase Realtime Database
-                                val addressRef = database.child("users").child(userId).child("userdata")
-                                addressRef.setValue(user)
-                                    .addOnSuccessListener {
-                                        Log.d(TAG, "Address stored successfully.")
-                                        // Send verification email
-                                        currentUser.sendEmailVerification()
-                                            .addOnCompleteListener { emailTask ->
-                                                if (emailTask.isSuccessful) {
-                                                    Log.d(TAG, "Verification email sent successfully.")
-                                                    Toast.makeText(this, "Account created! Please verify your email.", Toast.LENGTH_SHORT).show()
-
-                                                    // Redirect to login page
-                                                    val intent = Intent(this, login_activity::class.java)
-                                                    startActivity(intent)
-                                                } else {
-                                                    Log.d(TAG, "Failed to send verification email.")
-                                                    Toast.makeText(this, "Failed to send verification email.", Toast.LENGTH_SHORT).show()
+                    auth.createUserWithEmailAndPassword(email, password)
+                        .addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                val currentUser = auth.currentUser
+                                currentUser?.let {
+                                    val userId = it.uid
+                                    database.child("users").child(userId).child("userdata").setValue(user)
+                                        .addOnSuccessListener {
+                                            Log.d(TAG, "Address stored successfully.")
+                                            currentUser.sendEmailVerification()
+                                                .addOnCompleteListener { emailTask ->
+                                                    if (emailTask.isSuccessful) {
+                                                        Toast.makeText(this@AddAddressActivity, "Account created! Please verify your email.", Toast.LENGTH_SHORT).show()
+                                                        startActivity(Intent(this@AddAddressActivity, login_activity::class.java))
+                                                    } else {
+                                                        Toast.makeText(this@AddAddressActivity, "Failed to send verification email.", Toast.LENGTH_SHORT).show()
+                                                    }
                                                 }
-                                            }
-                                    }
-                                    .addOnFailureListener {
-                                        Log.e(TAG, "Failed to store address.", it)
-                                        Toast.makeText(this, "Failed to store address.", Toast.LENGTH_SHORT).show()
-                                    }
+                                        }
+                                        .addOnFailureListener { exception ->
+                                            Log.e(TAG, "Failed to store address.", exception)
+                                            Toast.makeText(this@AddAddressActivity, "Failed to store address.", Toast.LENGTH_SHORT).show()
+                                        }
+                                }
+                            } else {
+                                Log.e(TAG, "User creation failed: ${task.exception?.message}")
+                                Toast.makeText(this@AddAddressActivity, "User creation failed: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
                             }
-                        } else {
-                            Log.e(TAG, "User creation failed: ${task.exception?.message}")
-                            Toast.makeText(this, "User creation failed: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
                         }
-                    }
+                } else {
+                    Toast.makeText(this@AddAddressActivity, "Invalid address. Please check and try again.", Toast.LENGTH_SHORT).show()
+                }
             }
         }
-
-        text_view_login_1.setOnClickListener {
-            val intent = Intent(this, login_activity::class.java)
-            startActivity(intent)
-        }
-        text_view_login_2.setOnClickListener {
+        alreadyacc.setOnClickListener {
             val intent = Intent(this, login_activity::class.java)
             startActivity(intent)
         }
