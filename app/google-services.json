@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "748209582788",
+    "project_id": "uplift-eab2d",
+    "storage_bucket": "uplift-eab2d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:748209582788:android:fa5c4fab8b37541d628f91",
+        "android_client_info": {
+          "package_name": "com.example.uplift"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA81x3X4xgPYtTOmQrM0kgtGM9pQklbRAo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
