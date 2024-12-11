@@ -10,7 +10,11 @@ import androidx.core.view.WindowCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.example.uplift.activities.MainActivity
 import com.example.uplift.R
+import com.example.uplift.dataclass.Donation
+import com.example.uplift.dataclass.User
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 
 open class BaseActivity : AppCompatActivity() {
 
@@ -23,41 +27,61 @@ open class BaseActivity : AppCompatActivity() {
     override fun setContentView(layoutResID: Int) {
         super.setContentView(layoutResID)
 
-        // Initialize common views (ensure all activities include these IDs)
         drawerLayout = findViewById(R.id.drawer_layout)
         navigationView = findViewById(R.id.navigation_view)
         toolbar = findViewById(R.id.app_bar)
         menuIcon = findViewById(R.id.menu_icon)
         optionsIcon = findViewById(R.id.options_icon)
 
-        // Ensure content extends behind the status bar
+        // Extend content behind the status bar
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
-        // Set status bar color to match the app bar
+        // Set status bar color
         window.statusBarColor = getColor(R.color.app_bar_color)
 
-        // Set up the toolbar
+        // Setup toolbar
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
-        // Handle menu icon clicks
+        // Handle menu icon click
         menuIcon.setOnClickListener {
             drawerLayout.openDrawer(navigationView)
         }
 
-        // Handle options icon clicks
+        // Handle options icon click
         optionsIcon.setOnClickListener {
             showOptionsMenu(it)
         }
 
-        // Handle navigation drawer item clicks
+        // Check user role and update menu items
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        val userId = currentUser?.uid
+        val database = FirebaseDatabase.getInstance().reference
+        val userRef = database.child("users").child(userId!!).child("userdata")
+
+        userRef.get()
+            .addOnSuccessListener { snapshot ->
+                val user = snapshot.getValue(User::class.java)
+                val isAdmin = user?.admin ?: false
+                val navMenu = navigationView.menu
+                val navRequestItem = navMenu.findItem(R.id.nav_request)
+
+                // Hide or show 'nav_request' based on the admin role
+                navRequestItem.isVisible = isAdmin
+            }
+            .addOnFailureListener {
+                Toast.makeText(this, "Failed to fetch user data", Toast.LENGTH_SHORT).show()
+            }
+
+
+        // Handle navigation item clicks
         navigationView.setNavigationItemSelectedListener { menuItem ->
             handleNavigationItemClick(menuItem)
             drawerLayout.closeDrawer(navigationView)
             true
         }
 
-        // Handle drawer open/close status bar color changes
+        // Update status bar color based on drawer state
         drawerLayout.addDrawerListener(object : DrawerLayout.DrawerListener {
             override fun onDrawerSlide(drawerView: View, slideOffset: Float) {}
             override fun onDrawerOpened(drawerView: View) {
@@ -78,6 +102,7 @@ open class BaseActivity : AppCompatActivity() {
             R.id.nav_profile -> startActivity(Intent(this, ProfileActivity::class.java))
             R.id.nav_report -> startActivity(Intent(this, ReportActivity::class.java))
             R.id.nav_contactus -> startActivity(Intent(this, ContactUsActivity::class.java))
+            R.id.nav_request->startActivity(Intent(this,RequestActivity::class.java))
         }
     }
 
@@ -105,3 +130,4 @@ open class BaseActivity : AppCompatActivity() {
         popupMenu.show()
     }
 }
+

@@ -42,21 +42,9 @@ class ContactUsActivity : BaseActivity() {
 
         // Set onClickListener for Phone Icon
         phoneIcon.setOnClickListener {
-            // Create an Intent for the dial action
-            val phoneIntent = Intent(Intent.ACTION_DIAL).apply {
-                data = Uri.parse("tel:+1234567890") // Use your desired phone number
-            }
-
-            // Check if there is an app that can handle the phone intent
-            try {
-                if (phoneIntent.resolveActivity(packageManager) != null) {
-                    startActivity(phoneIntent)
-                } else {
-                    Toast.makeText(this, "No phone app found!", Toast.LENGTH_SHORT).show()
-                }
-            } catch (e: Exception) {
-                Toast.makeText(this, "Error opening phone app", Toast.LENGTH_SHORT).show()
-            }
+            val intent = Intent(Intent.ACTION_DIAL)  // Use ACTION_CALL if you want to directly call, ACTION_DIAL will open the dialer
+            intent.data = Uri.parse("tel:6376396023")
+            startActivity(intent)
         }
 
     }

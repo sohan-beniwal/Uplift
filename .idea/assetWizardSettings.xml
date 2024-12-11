@@ -23,7 +23,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material/icons/materialicons/edit/baseline_edit_24.xml" />
+                                      <entry key="url" value="file:/$USER_HOME$/AppData/Local/Android/Sdk/icons/material/materialicons/account_tree/baseline_account_tree_24.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -34,7 +34,7 @@
                         <option name="values">
                           <map>
                             <entry key="color" value="1565c0" />
-                            <entry key="outputName" value="edit_pencil_img" />
+                            <entry key="outputName" value="request" />
                             <entry key="sourceFile" value="C:\Users\msi\AndroidStudioProjects\Uplift" />
                           </map>
                         </option>

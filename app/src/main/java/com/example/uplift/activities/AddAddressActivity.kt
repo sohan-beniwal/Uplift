@@ -20,10 +20,15 @@ import com.example.uplift.dataclass.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.launch
+import okhttp3.Call
+import okhttp3.Callback
+import okhttp3.Response
+import java.io.IOException
+import java.net.URLEncoder
 
 class AddAddressActivity : AppCompatActivity() {
 
-    private val TAG = "AddAddressActivity"
+    private val TAG = "GeoCodingAPI"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -107,45 +112,107 @@ class AddAddressActivity : AppCompatActivity() {
                     val password = intent.getStringExtra("PASSWORD") ?: ""
                     val mobileNo = intent.getStringExtra("MOBILE_NO") ?: ""
                     val address = "$houseNo $buildingArea $otherInfo $city $state $pincode"
-                    val user = User(name, mobileNo, city, address)
 
-                    auth.createUserWithEmailAndPassword(email, password)
-                        .addOnCompleteListener { task ->
-                            if (task.isSuccessful) {
-                                val currentUser = auth.currentUser
-                                currentUser?.let {
-                                    val userId = it.uid
-                                    database.child("users").child(userId).child("userdata").setValue(user)
-                                        .addOnSuccessListener {
-                                            Log.d(TAG, "Address stored successfully.")
-                                            currentUser.sendEmailVerification()
-                                                .addOnCompleteListener { emailTask ->
-                                                    if (emailTask.isSuccessful) {
-                                                        Toast.makeText(this@AddAddressActivity, "Account created! Please verify your email.", Toast.LENGTH_SHORT).show()
-                                                        startActivity(Intent(this@AddAddressActivity, login_activity::class.java))
-                                                    } else {
-                                                        Toast.makeText(this@AddAddressActivity, "Failed to send verification email.", Toast.LENGTH_SHORT).show()
-                                                    }
+                    fetchCoordinates(address, "AIzaSyCp9qkv1uNtVJXFYPvQHb2-ATWYUpyPLJQ") { coordinates ->
+                        if (coordinates != null) {
+                            val (lat, lon) = coordinates.split(",").map { it.trim() }
+                            val latitude = lat.toDoubleOrNull() ?: 0.0
+                            val longitude = lon.toDoubleOrNull() ?: 0.0
+
+                            val user = User(name, mobileNo, city, address, admin = false, longitude, latitude)
+
+                            auth.createUserWithEmailAndPassword(email, password)
+                                .addOnCompleteListener { task ->
+                                    if (task.isSuccessful) {
+                                        val currentUser = auth.currentUser
+                                        currentUser?.let {
+                                            val userId = it.uid
+                                            database.child("users").child(userId).child("userdata").setValue(user)
+                                                .addOnSuccessListener {
+                                                    Log.d(TAG, "Address stored successfully.")
+                                                    currentUser.sendEmailVerification()
+                                                        .addOnCompleteListener { emailTask ->
+                                                            if (emailTask.isSuccessful) {
+                                                                Toast.makeText(
+                                                                    this@AddAddressActivity,
+                                                                    "Account created! Please verify your email.",
+                                                                    Toast.LENGTH_SHORT
+                                                                ).show()
+                                                                startActivity(Intent(this@AddAddressActivity, login_activity::class.java))
+                                                            } else {
+                                                                Toast.makeText(
+                                                                    this@AddAddressActivity,
+                                                                    "Failed to send verification email.",
+                                                                    Toast.LENGTH_SHORT
+                                                                ).show()
+                                                            }
+                                                        }
+                                                }
+                                                .addOnFailureListener { exception ->
+                                                    Log.e(TAG, "Failed to store address.", exception)
+                                                    Toast.makeText(this@AddAddressActivity, "Failed to store address.", Toast.LENGTH_SHORT).show()
                                                 }
                                         }
-                                        .addOnFailureListener { exception ->
-                                            Log.e(TAG, "Failed to store address.", exception)
-                                            Toast.makeText(this@AddAddressActivity, "Failed to store address.", Toast.LENGTH_SHORT).show()
-                                        }
+                                    } else {
+                                        Log.e(TAG, "User creation failed: ${task.exception?.message}")
+                                        Toast.makeText(this@AddAddressActivity, "User creation failed: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
+                                    }
                                 }
-                            } else {
-                                Log.e(TAG, "User creation failed: ${task.exception?.message}")
-                                Toast.makeText(this@AddAddressActivity, "User creation failed: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
-                            }
+                        } else {
+                            Toast.makeText(this@AddAddressActivity, "Invalid address. Please check and try again.", Toast.LENGTH_SHORT).show()
                         }
+                    }
                 } else {
                     Toast.makeText(this@AddAddressActivity, "Invalid address. Please check and try again.", Toast.LENGTH_SHORT).show()
                 }
             }
         }
+
+
         alreadyacc.setOnClickListener {
             val intent = Intent(this, login_activity::class.java)
             startActivity(intent)
         }
+    }
+
+    private fun fetchCoordinates(address: String, apiKey: String, callback: (String?) -> Unit) {
+        val encodedAddress = URLEncoder.encode(address, "UTF-8")
+        val url = "https://maps.googleapis.com/maps/api/geocode/json?address=$encodedAddress&key=$apiKey"
+        val client = OkHttpClient()
+
+        val request = Request.Builder()
+            .url(url)
+            .build()
+
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                Log.e("GeocodingAPI", "Failed to fetch coordinates: $e")
+                callback(null)
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                response.use {
+                    if (!response.isSuccessful) {
+                        Log.e("GeocodingAPI", "Error: ${response.message}")
+                        callback(null)
+                        return
+                    }
+                    val responseBody = response.body?.string()
+                    val json = JSONObject(responseBody!!)
+                    val results = json.optJSONArray("results")
+                    if (results != null && results.length() > 0) {
+                        val location = results.getJSONObject(0)
+                            .getJSONObject("geometry")
+                            .getJSONObject("location")
+                        val lat = location.getDouble("lat")
+                        val lng = location.getDouble("lng")
+                        Log.d("GeocodingAPI", "$lat")
+                        callback("Lat: $lat, Lon: $lng")
+                    } else {
+                        callback(null)
+                    }
+                }
+            }
+        })
     }
 }

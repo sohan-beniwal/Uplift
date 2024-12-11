@@ -3,6 +3,7 @@ package com.example.uplift.activities
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -17,10 +18,12 @@ class login_activity : AppCompatActivity() {
         val login_button  = findViewById<Button>(R.id.btn_login_1)
         val text_view_forgot_pw = findViewById<TextView>(R.id.text_login_4)
         val text_view_signup = findViewById<TextView>(R.id.text_login_5)
+        val email = findViewById<EditText>(R.id.login_screen_email)
+        val password = findViewById<EditText>(R.id.login_screen_password)
 
         login_button.setOnClickListener {
-            val email = "sohanbeniwal97283@gmail.com"  // Replace emailInput with your email field's ID
-            val password = "12345678"  // Replace passwordInput with your password field's ID
+            val email = email.text.toString()  // Replace emailInput with your email field's ID
+            val password = password.text.toString()  // Replace passwordInput with your password field's ID
 
             if (email.isEmpty() || password.isEmpty()) {
                 Toast.makeText(this, "Please enter email and password", Toast.LENGTH_SHORT).show()

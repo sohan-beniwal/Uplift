@@ -84,7 +84,7 @@
             android:textColor="@color/app_bar_text"
             android:textSize="16sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/editText_login_1"
+            app:layout_constraintBottom_toTopOf="@+id/login_screen_email"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/text_login_3">
 
@@ -127,6 +127,7 @@
             android:layout_marginLeft="35dp"
             android:layout_marginTop="10dp"
             android:layout_marginRight="35dp"
+            android:inputType="textPassword"
             android:background="@drawable/rounded_edit_text"
             android:backgroundTint="@color/app_bar_text"
             app:layout_constraintEnd_toEndOf="parent"

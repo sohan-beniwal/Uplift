@@ -10,7 +10,9 @@ data class Donation(
     val userId: String? = null,
     val userName: String? = null,
     val userPhoneNumber: String? = null,
-    val userAddress: String? = null
+    val userAddress: String? = null,
+    val longitude : Double?=null,
+    val latitude : Double?=null
 )
 
 

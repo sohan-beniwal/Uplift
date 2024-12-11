@@ -135,8 +135,6 @@ class DonateActivity : BaseActivity() {
             // Get current user data
             val currentUser = FirebaseAuth.getInstance().currentUser
             val userId = currentUser?.uid
-            val userName = currentUser?.displayName
-            val userPhoneNumber = currentUser?.phoneNumber
             val database = FirebaseDatabase.getInstance().reference
             val userRef = database.child("users").child(userId!!).child("userdata")
 
@@ -145,6 +143,8 @@ class DonateActivity : BaseActivity() {
                 .addOnSuccessListener { snapshot ->
                     val user = snapshot.getValue(User::class.java)
                     val address = user?.address
+                    val userName = user?.name
+                    val userPhoneNumber = user?.mobile
                     if (address != null) {
                         // Create an object of the data class with user info
                         val donation = Donation(
