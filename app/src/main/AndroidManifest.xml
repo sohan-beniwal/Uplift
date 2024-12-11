@@ -52,6 +52,9 @@
             android:name=".activities.ForgotPwActivity"
             android:exported="false" />
         <activity
+            android:name=".activities.RegisterNgoActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.MainActivity"
             android:exported="false" />
         <activity

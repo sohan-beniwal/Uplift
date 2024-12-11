@@ -15,7 +15,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="40dp"
         android:text="FORGOT \nPASSWORD ?"
         android:textColor="@color/app_bar_color"
         android:textSize="55sp"
@@ -40,7 +40,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
-        android:layout_height="340dp"
+        android:layout_height="300dp"
         android:background="@drawable/round_card"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -48,75 +48,52 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <TextView
+            android:id="@+id/email"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="55sp"
-            android:layout_marginBottom="4sp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="60dp"
             android:text="EMAIL"
             android:textColor="@color/app_bar_text"
             android:textSize="16sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/editText_forgot_pw_1"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
         </TextView>
 
         <EditText
-            android:id="@+id/editText_forgot_pw_1"
+            android:id="@+id/forgot_pw_email"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_marginLeft="40dp"
-            android:layout_marginTop="60dp"
-            android:layout_marginRight="40dp"
+            android:layout_marginLeft="35dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="35dp"
             android:background="@drawable/rounded_edit_text"
             android:backgroundTint="@color/app_bar_text"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:layout_editor_absoluteX="30dp">
-
-        </EditText>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="55sp"
-            android:layout_marginBottom="4sp"
-            android:text="OTP"
-            android:textColor="@color/app_bar_text"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/editText_forgot_pw_2"
-            app:layout_constraintStart_toStartOf="parent">
-
-        </TextView>
-
-        <EditText
-            android:id="@+id/editText_forgot_pw_2"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginLeft="40dp"
-            android:layout_marginTop="40dp"
-            android:layout_marginRight="40dp"
-            android:background="@drawable/rounded_edit_text"
-            android:backgroundTint="@color/app_bar_text"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editText_forgot_pw_1">
+            app:layout_constraintTop_toBottomOf="@+id/email">
 
         </EditText>
+
 
         <Button
             android:id="@+id/btn_forgot_pw_next"
             android:layout_width="250dp"
             android:layout_height="65dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="50dp"
             android:background="@drawable/round_button_white"
-            android:text="Next"
+            android:text="SEND OTP"
             android:textColor="@color/app_bar_color"
             android:textSize="25sp"
             android:textStyle="bold"
-            android:layout_marginTop="30dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editText_forgot_pw_2">
+            app:layout_constraintTop_toBottomOf="@+id/forgot_pw_email">
 
         </Button>
 

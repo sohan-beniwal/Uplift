@@ -22,26 +22,35 @@ class ContactUsActivity : BaseActivity() {
 
         // Set onClickListener for Email Icon
         emailIcon.setOnClickListener {
-            val emailIntent = Intent(Intent.ACTION_SENDTO).apply {
-                data = Uri.parse("mailto:info@uplift.com")  // Use your email address
+            val emailIntent = Intent(Intent.ACTION_SEND).apply {
+                type = "message/rfc822" // Email-specific MIME type
+                putExtra(Intent.EXTRA_EMAIL, arrayOf("info@uplift.com")) // Replace with your email
+                putExtra(Intent.EXTRA_SUBJECT, "Support Request")
+                putExtra(Intent.EXTRA_TEXT, "Write your query here...")
+                setPackage("com.google.android.gm") // Restrict to Gmail
             }
+            startActivity(emailIntent)
+        }
 
-            try {
-                val packageManager = packageManager
-                val availableApps = packageManager.queryIntentActivities(emailIntent, 0)
-
-                if (availableApps.isNotEmpty()) {
-                    startActivity(emailIntent)
-                } else {
-                    Toast.makeText(this, "No email app found!", Toast.LENGTH_SHORT).show()
-                }
-            } catch (e: Exception) {
-                Toast.makeText(this, "Error opening email app: ${e.message}", Toast.LENGTH_SHORT).show()
+        emailText.setOnClickListener {
+            val emailIntent = Intent(Intent.ACTION_SEND).apply {
+                type = "message/rfc822" // Email-specific MIME type
+                putExtra(Intent.EXTRA_EMAIL, arrayOf("info@uplift.com")) // Replace with your email
+                putExtra(Intent.EXTRA_SUBJECT, "Support Request")
+                putExtra(Intent.EXTRA_TEXT, "Write your query here...")
+                setPackage("com.google.android.gm") // Restrict to Gmail
             }
+            startActivity(emailIntent)
         }
 
         // Set onClickListener for Phone Icon
         phoneIcon.setOnClickListener {
+            val intent = Intent(Intent.ACTION_DIAL)  // Use ACTION_CALL if you want to directly call, ACTION_DIAL will open the dialer
+            intent.data = Uri.parse("tel:6376396023")
+            startActivity(intent)
+        }
+
+        phoneText.setOnClickListener {
             val intent = Intent(Intent.ACTION_DIAL)  // Use ACTION_CALL if you want to directly call, ACTION_DIAL will open the dialer
             intent.data = Uri.parse("tel:6376396023")
             startActivity(intent)

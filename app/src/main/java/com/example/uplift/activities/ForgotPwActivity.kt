@@ -20,7 +20,7 @@ class ForgotPwActivity : AppCompatActivity() {
 
         next_button.setOnClickListener{
 
-            val intent = Intent(this, NewPwActivity::class.java)
+            val intent = Intent(this, login_activity::class.java)
             startActivity(intent)
         }
 
