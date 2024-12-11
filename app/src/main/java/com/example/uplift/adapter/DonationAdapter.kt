@@ -8,6 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.uplift.R
 import com.example.uplift.dataclass.Donation
@@ -29,7 +31,7 @@ class DonationAdapter(private val donationList: List<Donation>) :
             itemView.findViewById<TextView>(R.id.list_name).text = donate.userName
 
             // Set the mobile number
-            itemView.findViewById<TextView>(R.id.list_status).text = donate.userPhoneNumber
+            itemView.findViewById<TextView>(R.id.list_status).text = "Pending"
             longitude=donate.longitude
             latitude=donate.latitude
             phonenumber=donate.userPhoneNumber
@@ -37,6 +39,8 @@ class DonationAdapter(private val donationList: List<Donation>) :
             // Set the day and time
             itemView.findViewById<TextView>(R.id.list_day).text = donate.day
             itemView.findViewById<TextView>(R.id.list_time).text = donate.time
+            itemView.findViewById<TextView>(R.id.list_address).text = donate.userAddress
+
             // Handle options menu click
             itemView.findViewById<ImageView>(R.id.options_icon).setOnClickListener {
                 // Add logic here for options menu click
@@ -49,19 +53,14 @@ class DonationAdapter(private val donationList: List<Donation>) :
                 }
             }
             itemView.findViewById<ImageView>(R.id.list_directions).setOnClickListener {
-                if (latitude != null && longitude != null) {
-                    // Create the URL for Google Maps with directions
-                    val geoUri = "google.navigation:q=$latitude,$longitude&mode=d"
-                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(geoUri))
-                    intent.setPackage("com.google.android.apps.maps")  // This ensures that Google Maps opens
+                Log.d("Maps", "Coordinates: $longitude, $latitude")
 
-                    // Check if there is an app that can handle this intent
-                    if (intent.resolveActivity(itemView.context.packageManager) != null) {
-                        itemView.context.startActivity(intent)
-                    } else {
-                        // Handle the case where Google Maps is not installed (optional)
-                        Log.e("Maps", "Google Maps is not installed.")
-                    }
+                if (latitude != null && longitude != null) {
+                    // Build the Google Maps navigation URI for driving mode
+                    val gmmIntentUri = Uri.parse("google.navigation:q=$latitude,$longitude")
+                    val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
+                    mapIntent.setPackage("com.google.android.apps.maps") // Ensure it opens in Google Maps
+                    itemView.context.startActivity(mapIntent)
                 }
             }
         }

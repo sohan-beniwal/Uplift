@@ -1,5 +1,6 @@
 package com.example.uplift.activities
 
+import android.app.ProgressDialog
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
@@ -31,6 +32,9 @@ class DonateActivity : BaseActivity() {
         val itemname: EditText = findViewById(R.id.itemname)
         val quantity: EditText = findViewById(R.id.quantity)
         val additional: EditText = findViewById(R.id.additionalinformation)
+        val progressDialog : ProgressDialog
+        progressDialog = ProgressDialog(this)
+        progressDialog.setMessage("Submitting to Database")
 
         val items = resources.getStringArray(R.array.dropdown_items).toMutableList()
         val dayArr = listOf("Select Day", "Today", "Tomorrow")
@@ -116,9 +120,9 @@ class DonateActivity : BaseActivity() {
             val selectedCategory = spinner.selectedItem as String
             val selectedDay = day.selectedItem as String
             val selectedTime = time.selectedItem as String
-            val itemnamefinal = itemname.text.toString()
-            val quantityfinal = quantity.text.toString()
-            val additionalfinal = additional.text.toString()
+            val itemnamefinal = itemname.text.toString().trim()
+            val quantityfinal = quantity.text.toString().trim()
+            val additionalfinal = additional.text.toString().trim()
 
             if (selectedCategory == "Select Category" ||
                 selectedDay == "Select Day" ||
@@ -131,7 +135,7 @@ class DonateActivity : BaseActivity() {
                 Toast.makeText(this, "Please fill all fields correctly", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-
+            progressDialog.show()
             // Get current user data
             val currentUser = FirebaseAuth.getInstance().currentUser
             val userId = currentUser?.uid
@@ -145,6 +149,9 @@ class DonateActivity : BaseActivity() {
                     val address = user?.address
                     val userName = user?.name
                     val userPhoneNumber = user?.mobile
+                    val longitude = user?.longitude
+                    val latitude = user?.latitude
+
                     if (address != null) {
                         // Create an object of the data class with user info
                         val donation = Donation(
@@ -157,7 +164,9 @@ class DonateActivity : BaseActivity() {
                             userId = userId,
                             userName = userName,
                             userPhoneNumber = userPhoneNumber,
-                            userAddress = address // Use the retrieved address
+                            userAddress = address,
+                            longitude = longitude,
+                            latitude = latitude
                         )
 
                         // Pass the object to the database layer
@@ -167,6 +176,7 @@ class DonateActivity : BaseActivity() {
                         additional.text.clear()
                         day.setSelection(0)
                         time.setSelection(0)
+                        progressDialog.dismiss()
                     } else {
                         Toast.makeText(this, "User address not found", Toast.LENGTH_SHORT).show()
                     }
@@ -177,7 +187,7 @@ class DonateActivity : BaseActivity() {
         }
     }
 
-        private fun saveDonationToDatabase(donation: Donation) {
+    private fun saveDonationToDatabase(donation: Donation) {
         val database = FirebaseDatabase.getInstance()
         val donationsRef = database.reference.child("donations").push()
 
