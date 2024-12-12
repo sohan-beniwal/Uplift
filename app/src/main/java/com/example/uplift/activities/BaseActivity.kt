@@ -4,6 +4,7 @@ import android.content.Intent
 import android.view.MenuItem
 import android.view.View
 import android.widget.PopupMenu
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
@@ -32,6 +33,15 @@ open class BaseActivity : AppCompatActivity() {
         toolbar = findViewById(R.id.app_bar)
         menuIcon = findViewById(R.id.menu_icon)
         optionsIcon = findViewById(R.id.options_icon)
+        // Find NavigationView
+        val navigationView: NavigationView = findViewById(R.id.navigation_view)
+
+        // Access the header view
+        val headerView = navigationView.getHeaderView(0)
+
+        // Find the TextView in the header and update its text
+        val headerText: TextView = headerView.findViewById(R.id.username_nav_header)
+
 
         // Extend content behind the status bar
         WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -65,7 +75,7 @@ open class BaseActivity : AppCompatActivity() {
                 val isAdmin = user?.admin ?: false
                 val navMenu = navigationView.menu
                 val navRequestItem = navMenu.findItem(R.id.nav_request)
-
+                headerText.text = "Hello, ${user?.name}"
                 // Hide or show 'nav_request' based on the admin role
                 navRequestItem.isVisible = isAdmin
             }
@@ -136,7 +146,7 @@ open class BaseActivity : AppCompatActivity() {
                 }
                 R.id.logout -> {
                     FirebaseAuth.getInstance().signOut()
-                    val intent = Intent(this, login_activity::class.java)
+                    val intent = Intent(this, StartActivity::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                     startActivity(intent)
                     true

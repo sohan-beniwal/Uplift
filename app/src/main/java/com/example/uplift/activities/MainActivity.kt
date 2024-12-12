@@ -11,11 +11,15 @@ import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.ImageSwitcher
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
 import com.example.uplift.R
 import com.example.uplift.activities.BaseActivity
 import com.example.uplift.activities.DonateActivity
+import com.example.uplift.dataclass.User
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 
 class MainActivity : BaseActivity() {
 
@@ -60,7 +64,25 @@ class MainActivity : BaseActivity() {
         foodBtn = findViewById(R.id.image1)
         otherBtn = findViewById(R.id.image4)
         moneyBtn = findViewById(R.id.image3)
+        val username = findViewById<TextView>(R.id.username)
 
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        val userId = currentUser?.uid
+        val database = FirebaseDatabase.getInstance().reference
+        val userRef = database.child("users").child(userId!!).child("userdata")
+
+        userRef.get()
+            .addOnSuccessListener { snapshot ->
+                val user = snapshot.getValue(User::class.java)
+                if (user != null) {
+                    username.text = "Welcome, ${user.name}\u2764\uFE0F"
+                } else {
+                    Toast.makeText(this, "User data is null", Toast.LENGTH_SHORT).show()
+                }
+            }
+            .addOnFailureListener {
+                Toast.makeText(this, "Failed to fetch user data", Toast.LENGTH_SHORT).show()
+            }
 
         imageSwitcher = findViewById(R.id.imageSwitcher)
         imageSwitcher.setFactory {
