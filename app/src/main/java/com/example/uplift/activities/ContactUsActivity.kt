@@ -57,4 +57,10 @@ class ContactUsActivity : BaseActivity() {
         }
 
     }
+    override fun onBackPressed() {
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+        finish() // Optional: Finish current Activity if it should not stay in the stack
+    }
+
 }

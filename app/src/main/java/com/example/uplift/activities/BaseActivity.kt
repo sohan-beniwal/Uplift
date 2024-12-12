@@ -98,11 +98,21 @@ open class BaseActivity : AppCompatActivity() {
 
     private fun handleNavigationItemClick(menuItem: MenuItem) {
         when (menuItem.itemId) {
-            R.id.nav_home -> startActivity(Intent(this, MainActivity::class.java))
-            R.id.nav_profile -> startActivity(Intent(this, ProfileActivity::class.java))
-            R.id.nav_report -> startActivity(Intent(this, ReportActivity::class.java))
-            R.id.nav_contactus -> startActivity(Intent(this, ContactUsActivity::class.java))
-            R.id.nav_request->startActivity(Intent(this,RequestActivity::class.java))
+            R.id.nav_home -> {
+                startActivity(Intent(this, MainActivity::class.java))
+                finish() }
+            R.id.nav_profile -> {
+                startActivity(Intent(this, ProfileActivity::class.java))
+                finish()
+            }
+            R.id.nav_contactus -> {
+                startActivity(Intent(this, ContactUsActivity::class.java))
+                finish()
+            }
+            R.id.nav_request-> {
+                startActivity(Intent(this, RequestActivity::class.java))
+                finish()
+            }
         }
     }
 
@@ -113,15 +123,22 @@ open class BaseActivity : AppCompatActivity() {
         popupMenu.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.help -> {
-                    Toast.makeText(this, "Help Clicked", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this, ContactUsActivity::class.java)
+                    startActivity(intent)
+                    finish()
                     true
                 }
                 R.id.about -> {
-                    Toast.makeText(this, "About Clicked", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this, ContactUsActivity::class.java)
+                    startActivity(intent)
+                    finish()
                     true
                 }
                 R.id.logout -> {
-                    Toast.makeText(this, "Logout Clicked", Toast.LENGTH_SHORT).show()
+                    FirebaseAuth.getInstance().signOut()
+                    val intent = Intent(this, login_activity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    startActivity(intent)
                     true
                 }
                 else -> false

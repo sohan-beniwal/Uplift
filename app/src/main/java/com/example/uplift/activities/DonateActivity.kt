@@ -1,6 +1,7 @@
 package com.example.uplift.activities
 
 import android.app.ProgressDialog
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
@@ -207,4 +208,10 @@ class DonateActivity : BaseActivity() {
             spinner.setSelection(position)
         }
     }
+    override fun onBackPressed() {
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+        finish() // Optional: Finish current Activity if it should not stay in the stack
+    }
+
 }

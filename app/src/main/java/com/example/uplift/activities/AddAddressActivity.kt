@@ -97,9 +97,11 @@ class AddAddressActivity : AppCompatActivity() {
                                                                 "Account created! Please verify your email.",
                                                                 Toast.LENGTH_SHORT
                                                             ).show()
+                                                            progressDialog.dismiss()
                                                             startActivity(
                                                                 Intent(this@AddAddressActivity, login_activity::class.java)
                                                             )
+
                                                         } else {
                                                             Toast.makeText(
                                                                 this@AddAddressActivity,
@@ -134,7 +136,6 @@ class AddAddressActivity : AppCompatActivity() {
                             Toast.LENGTH_SHORT
                         ).show()
                     }
-                    progressDialog.dismiss()
                 } else {
                     Toast.makeText(
                         this@AddAddressActivity,

@@ -1,7 +1,9 @@
 package com.example.uplift.activities
 
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -9,6 +11,7 @@ import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.ImageSwitcher
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
 import com.example.uplift.R
 import com.example.uplift.activities.BaseActivity
@@ -79,7 +82,19 @@ class MainActivity : BaseActivity() {
         // Set onClickListeners for donation buttons
         clothBtn.setOnClickListener { navigateToDonateScreen("Clothes") }
         foodBtn.setOnClickListener { navigateToDonateScreen("Food") }
-        moneyBtn.setOnClickListener { navigateToDonateScreen("Money") }
+        moneyBtn.setOnClickListener {
+            val upiAddress = "soniishika201@okicici" // Replace with the actual UPI ID or the payee UPI address.
+            val amount = "0.00" // Amount to be transferred
+            val note = "Donation" // Optional note
+            val transactionRefId = "Txn12345" // Unique transaction reference
+
+            val uri = Uri.parse("upi://pay?pa=$upiAddress&pn=Donation&mc=0000&tid=$transactionRefId&tr=$transactionRefId&tn=$note&am=$amount&cu=INR")
+
+            val intent = Intent(Intent.ACTION_VIEW, uri)
+            intent.putExtra(Intent.EXTRA_REFERRER, Uri.parse("android-app://com.android.chrome"))
+            startActivity(intent)
+        }
+
         otherBtn.setOnClickListener { navigateToDonateScreen("Other") }
     }
 
@@ -106,5 +121,9 @@ class MainActivity : BaseActivity() {
         val intent = Intent(this, DonateActivity::class.java)
         intent.putExtra("SELECTED_CATEGORY", category)
         startActivity(intent)
+    }
+    override fun onBackPressed() {
+        // Exit the app
+        finishAffinity() // Closes all activities and exits the app
     }
 }

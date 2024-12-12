@@ -12,10 +12,6 @@
         android:icon="@drawable/contactus"
         android:title="Contact Us" />
     <item
-        android:id="@+id/nav_report"
-        android:icon="@drawable/report"
-        android:title="Report" />
-    <item
         android:id="@+id/nav_request"
         android:icon="@drawable/request"
         android:title="Request" />

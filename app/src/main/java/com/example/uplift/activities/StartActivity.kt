@@ -10,10 +10,23 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.uplift.R
+import com.google.firebase.auth.FirebaseAuth
 
 class StartActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        if (currentUser != null) {
+            // User is logged in, redirect to MainActivity
+            startActivity(Intent(this, MainActivity::class.java))
+        } else {
+            // User is not logged in, redirect to LoginActivity
+            startActivity(Intent(this, login_activity::class.java))
+        }
+
+        // Finish SplashActivity to prevent it from staying in the back stack
+        finish()
+
         setContentView(R.layout.activity_start)
 
 

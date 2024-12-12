@@ -1,5 +1,6 @@
 package com.example.uplift.activities
 
+import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
@@ -21,7 +22,12 @@ class login_activity : AppCompatActivity() {
         val email = findViewById<EditText>(R.id.login_screen_email)
         val password = findViewById<EditText>(R.id.login_screen_password)
 
+
         login_button.setOnClickListener {
+            var progressDialog =  ProgressDialog(this)
+            progressDialog.setMessage("Authenticating")
+            progressDialog.show()
+
             val email = email.text.toString()  // Replace emailInput with your email field's ID
             val password = password.text.toString()  // Replace passwordInput with your password field's ID
 
@@ -39,6 +45,7 @@ class login_activity : AppCompatActivity() {
                             if (user.isEmailVerified) {
                                 // Email is verified
                                 val intent = Intent(this, MainActivity::class.java)
+                                progressDialog.dismiss()
                                 startActivity(intent)
                                 finish() // Optional: Close the login activity
                             } else {
