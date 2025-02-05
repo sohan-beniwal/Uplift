@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Uplift</string>
-    <string name="google_maps_api_key">AIzaSyCp9qkv1uNtVJXFYPvQHb2-ATWYUpyPLJQ</string>
+    <string name="google_maps_api_key">"API_KEY"</string>
     <string-array name="dropdown_items">
         <item>Food</item>
         <item>Clothes</item>
